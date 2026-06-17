@@ -3,3 +3,11 @@
 ^README\.Rmd$
 ^LICENSE\.md$
 _pendientes.md
+^\.positai$
+^\.claude$
+^vignettes/\.quarto$
+^vignettes/*_files$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^\.github$
