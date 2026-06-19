@@ -1,3 +1,3 @@
 
-
-- [] probar más casos de limpieza, sobre todo con guiones
+- [x] escribir readme
+- [ ] probar más casos de limpieza, sobre todo con guiones

@@ -18,3 +18,10 @@ Aplica varias pruebas para confirmar que un RUT es correcto.
 \details{
 Para confirmar que un RUT es válido, detecta que contenga un guión, verifica el formato "xxx-x", y valida que el dígito verificador sea correcto. Esta función acepta uno o varios RUTs.
 }
+\examples{
+validar_rut("17505116-3")
+
+validar_rut(c("23376940-1", "24444145-9"))
+
+validar_rut(c("hola", "11111111", "19413730-3"))
+}

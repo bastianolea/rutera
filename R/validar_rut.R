@@ -9,13 +9,17 @@
 #'
 #' @param rut Vector de RUTs a consultar
 #'
+#' @examples
+#' validar_rut("17505116-3")
+#'
+#' validar_rut(c("23376940-1", "24444145-9"))
+#'
+#' validar_rut(c("hola", "11111111", "19413730-3"))
 validar_rut <- function(rut) {
-
   # por cada RUT:
   validacion <- purrr::map(
     rut,
     \(rut) {
-
       # rut <- "18172852-3"
       rut <- as.character(rut)
       rut <- toupper(rut)
@@ -45,7 +49,8 @@ validar_rut <- function(rut) {
       }
 
       return(TRUE)
-    })
+    }
+  )
 
   return(
     unlist(validacion)

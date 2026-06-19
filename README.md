@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# rutera
+# Paquete `{rutera}`
 
 <!-- badges: start -->
 
@@ -10,35 +10,104 @@
 Herramientas para limpiar, validar y verificar el número de cédula de
 identidad Chilena en R.
 
-*En construcción*
+## Instalación
 
-<!----
-## Installation
-&#10;You can install the development version of rutera like so:
-&#10;``` r
-# FILL THIS IN! HOW CAN PEOPLE INSTALL YOUR DEV PACKAGE?
-```
-&#10;## Example
-&#10;This is a basic example which shows you how to solve a common problem:
-&#10;
 ``` r
-# library(rutera)
-## basic example code
+# install.packages("pak")
+pak::pkg_install("bastianolea/rutera")
 ```
-&#10;What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
-&#10;
+
 ``` r
-summary(cars)
-#>      speed           dist       
-#>  Min.   : 4.0   Min.   :  2.00  
-#>  1st Qu.:12.0   1st Qu.: 26.00  
-#>  Median :15.0   Median : 36.00  
-#>  Mean   :15.4   Mean   : 42.98  
-#>  3rd Qu.:19.0   3rd Qu.: 56.00  
-#>  Max.   :25.0   Max.   :120.00
+# install.packages("devtools")
+devtools::install_github("bastianolea/rutera")
 ```
-&#10;You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this.
-&#10;You can also embed plots, for example:
-&#10;<img src="man/figures/README-pressure-1.png" alt="" width="100%" />
-&#10;In that case, don't forget to commit and push the resulting figure files, so they display on GitHub and CRAN.
-&#10;--->
+
+## Calcular dígito verificador
+
+El dígito verificador del RUT permite confirmar que se escribió
+correctamente usando el [algoritmo módulo
+11](https://es.wikipedia.org/wiki/Código_de_control). En resumen, este
+algoritmo:
+
+1.  Toma los dígitos previos al guión
+2.  Multiplica cada dígito, de derecha a izquierda, por la secuencia
+    cíclica `2, 3, 4, 5, 6, 7` y suma los resultados
+3.  A esta suma se le calcula el módulo (resto de la división entera) de
+    11, y el resultado se le resta a 11
+4.  El resultado de lo anterior es el dígito verificador; pero si el
+    resultado es `11` o `10`, el dígito será `0` o `K`, respectivamente
+
+La función `calcular_digito()` implementa el cálculo del código
+verificador de cualquier RUT sin código verificador:
+
+``` r
+library(rutera)
+
+calcular_digito(24324110)
+#> [1] "3"
+
+calcular_digito(
+  c(11111111, 
+    1111111,
+    8519622)
+)
+#> [1] "1" "4" "7"
+```
+
+## Validar un RUT
+
+Otra cosa que podemos necesitar hacer con los RUT es verificar si vienen
+en un formato determinado. En este caso, el formato apropiado será
+`xxxxxxxx-y`, y esta función verificará: que el RUT contiene un guión,
+que se sigue el formato `xxxxxxxx-y`, y que el dígito verificador que
+trae sea el correcto (usando la función `calcular_digito()`):
+
+``` r
+
+validar_rut("17505116-3")
+#> [1] TRUE
+validar_rut("23376940-1")
+#> [1] TRUE
+validar_rut(c("23376940-1", "24444145-9"))
+#> [1] TRUE TRUE
+validar_rut("11111111")
+#> ! RUT 11111111 no incluye guión
+#> [1] FALSE
+validar_rut(c("hola", "11111111", "19413730-3"))
+#> ! RUT HOLA no incluye guión
+#> ! RUT 11111111 no incluye guión
+#> [1] FALSE FALSE  TRUE
+```
+
+## Limpiar RUT
+
+Si las personas ingresan sus RUT manualmente a una encuesta o
+formulario, o si son digitados por otras personas, lo más probable es
+que vengan mal escritos o al menos no estandarizados. La función
+`limpiar_rut()` realiza varios pasos de limpieza sobre los textos para
+retornar RUTs que siguen el formato `xxxxxxx-y`.
+
+``` r
+rut_sucios <- c("24.444.145-9",
+                "24444145 9",
+                "24 444 145 9",
+                "24,444,145,9",
+                "2M4A4P4A4C1H4E59",
+                "244441459",
+                "hola hola")
+
+limpiar_rut(rut_sucios)
+#> ! algunos RUT no tienen últimos dígitos
+#> ! algunos RUT vacíos luego de la limpieza
+#> [1] "24444145-9" "24444145-9" "24444145-9" "24444145-9" "24444145-9"
+#> [6] "24444145-9" NA
+```
+
+------------------------------------------------------------------------
+
+Existe otro paquete de R que hace lo mismo, [`{clrutr}`, de Joshua
+Kunst](https://jkunst.com/clrutr/index.html), y que probablemente sea
+mejor. Yo hice este paquete solamente para aprender.
+
+Más información [en este post de mi
+blog.](https://bastianolea.rbind.io/blog/validacion_rut/)

@@ -15,3 +15,10 @@ Dígito verificador del cuerpo del RUT entregrado, en tipo caracter
 \description{
 Calcula el dígito verificador para un RUT sin dígito verificador. Puede recibir uno o varios RUTs.
 }
+\examples{
+calcular_digito(24324110)
+
+calcular_digito(
+  c(11111111, 1111111, 8519622)
+)
+}

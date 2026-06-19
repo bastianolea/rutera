@@ -1,9 +1,9 @@
 Package: rutera
 Title: Herramientas para limpiar, validar y verificar el número de cédula de identidad Chilena
-Version: 0.0.0.9000
+Version: 1.0
 Authors@R: 
     person("Bastián", "Olea", , "bastianolea@gmail.com", role = c("aut", "cre"))
-Description: Herramientas para limpiar, validar y verificar el número de cédula de identidad Chilena
+Description: Herramientas para limpiar, validar y verificar el número de cédula de identidad Chilena.
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

@@ -7,8 +7,13 @@
 #'
 #' @param rut_sin_digito Vector de RUTs sin dígito verificador
 #'
+#' @examples
+#' calcular_digito(24324110)
+#'
+#' calcular_digito(
+#'   c(11111111, 1111111, 8519622)
+#' )
 calcular_digito <- function(rut_sin_digito) {
-
   # separar números en dígitos
   digitos_lista <- strsplit(as.character(rut_sin_digito), "")
 
@@ -28,7 +33,8 @@ calcular_digito <- function(rut_sin_digito) {
       return(
         as.character(digito)
       )
-    })
+    }
+  )
 
   digito <- purrr::list_c(digito)
 

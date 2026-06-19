@@ -6,6 +6,18 @@
 #' @param ruts Vector de texto con RUTs
 #'
 #' @returns Vector de texto con RUTs limpios en formato `xxxxxxx-y`
+#'
+#' @examples
+#' rut_sucios <- c(
+#'   "24.444.145-9",
+#'   "24444145 9",
+#'   "24 444 145 9",
+#'   "24,444,145,9",
+#'   "2M4A4P4A4C1H4E59",
+#'   "244441459",
+#'   "hola hola")
+#'
+#' limpiar_rut(rut_sucios)
 limpiar_rut <- function(ruts) {
   originales <- ruts
 
