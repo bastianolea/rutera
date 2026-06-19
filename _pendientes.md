@@ -1,3 +1,5 @@
 # NA
 
-- \[\] probar más casos de limpieza, sobre todo con guiones
+escribir readme
+
+probar más casos de limpieza, sobre todo con guiones

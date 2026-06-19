@@ -1,6 +1,115 @@
-# rutera
+# Paquete `{rutera}`
 
 Herramientas para limpiar, validar y verificar el número de cédula de
 identidad Chilena en R.
 
-*En construcción*
+## Instalación
+
+``` r
+
+# install.packages("pak")
+pak::pkg_install("bastianolea/rutera")
+```
+
+``` r
+
+# install.packages("devtools")
+devtools::install_github("bastianolea/rutera")
+```
+
+## Calcular dígito verificador
+
+El dígito verificador del RUT permite confirmar que se escribió
+correctamente usando el [algoritmo módulo
+11](https://es.wikipedia.org/wiki/C%C3%B3digo_de_control). En resumen,
+este algoritmo:
+
+1.  Toma los dígitos previos al guión
+2.  Multiplica cada dígito, de derecha a izquierda, por la secuencia
+    cíclica `2, 3, 4, 5, 6, 7` y suma los resultados
+3.  A esta suma se le calcula el módulo (resto de la división entera) de
+    11, y el resultado se le resta a 11
+4.  El resultado de lo anterior es el dígito verificador; pero si el
+    resultado es `11` o `10`, el dígito será `0` o `K`, respectivamente
+
+La función
+[`calcular_digito()`](https://bastianolea.github.io/rutera/reference/calcular_digito.md)
+implementa el cálculo del código verificador de cualquier RUT sin código
+verificador:
+
+``` r
+
+library(rutera)
+
+calcular_digito(24324110)
+#> [1] "3"
+
+calcular_digito(
+  c(11111111, 
+    1111111,
+    8519622)
+)
+#> [1] "1" "4" "7"
+```
+
+## Validar un RUT
+
+Otra cosa que podemos necesitar hacer con los RUT es verificar si vienen
+en un formato determinado. En este caso, el formato apropiado será
+`xxxxxxxx-y`, y esta función verificará: que el RUT contiene un guión,
+que se sigue el formato `xxxxxxxx-y`, y que el dígito verificador que
+trae sea el correcto (usando la función
+[`calcular_digito()`](https://bastianolea.github.io/rutera/reference/calcular_digito.md)):
+
+``` r
+
+
+validar_rut("17505116-3")
+#> [1] TRUE
+validar_rut("23376940-1")
+#> [1] TRUE
+validar_rut(c("23376940-1", "24444145-9"))
+#> [1] TRUE TRUE
+validar_rut("11111111")
+#> ! RUT 11111111 no incluye guión
+#> [1] FALSE
+validar_rut(c("hola", "11111111", "19413730-3"))
+#> ! RUT HOLA no incluye guión
+#> ! RUT 11111111 no incluye guión
+#> [1] FALSE FALSE  TRUE
+```
+
+## Limpiar RUT
+
+Si las personas ingresan sus RUT manualmente a una encuesta o
+formulario, o si son digitados por otras personas, lo más probable es
+que vengan mal escritos o al menos no estandarizados. La función
+[`limpiar_rut()`](https://bastianolea.github.io/rutera/reference/limpiar_rut.md)
+realiza varios pasos de limpieza sobre los textos para retornar RUTs que
+siguen el formato `xxxxxxx-y`.
+
+``` r
+
+rut_sucios <- c("24.444.145-9",
+                "24444145 9",
+                "24 444 145 9",
+                "24,444,145,9",
+                "2M4A4P4A4C1H4E59",
+                "244441459",
+                "hola hola")
+
+limpiar_rut(rut_sucios)
+#> ! algunos RUT no tienen últimos dígitos
+#> ! algunos RUT vacíos luego de la limpieza
+#> [1] "24444145-9" "24444145-9" "24444145-9" "24444145-9" "24444145-9"
+#> [6] "24444145-9" NA
+```
+
+------------------------------------------------------------------------
+
+Existe otro paquete de R que hace lo mismo, [`{clrutr}`, de Joshua
+Kunst](https://jkunst.com/clrutr/index.html), y que probablemente sea
+mejor. Yo hice este paquete solamente para aprender.
+
+Más información [en este post de mi
+blog.](https://bastianolea.rbind.io/blog/validacion_rut/)
