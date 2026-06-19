@@ -1,16 +1,25 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# Paquete `{rutera}`
+# Paquete `{rutera}` <a href="https://bastianolea.github.io/rutera/"><img src="man/figures/logo.png" align="right" height="160" alt="rutera website" /></a>
 
 <!-- badges: start -->
 
 <!-- badges: end -->
 
 Herramientas para limpiar, validar y verificar el número de cédula de
-identidad Chilena en R.
+identidad Chilena en R. Estas funciones ayudan a realizar operaciones
+frecuentes para datos de ciudadanos chilenos que incluyen el RUT como
+identificador único.
+
+Las funciones del paquete son `calcular_digito()` para el dígito
+verificador, `validar_rut()` que te puede ayudar a revisar si los RUT
+vienen correctos, y `limpiar_rut()`, que tranforma o limpia los RUT de
+distintos formatos a una estructura en común.
 
 ## Instalación
+
+Puedes instalar el paquete en tu R con una de las siguientes opciones:
 
 ``` r
 # install.packages("pak")
